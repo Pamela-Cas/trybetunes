@@ -5,7 +5,6 @@ import Links from './component/Links';
 
 class App extends React.Component {
   render() {
-    return (<p>TrybeTunes</p>);
     return (
       <BrowserRouter>
         <Links />
@@ -14,3 +13,5 @@ class App extends React.Component {
     );
   }
 }
+
+export default App;
