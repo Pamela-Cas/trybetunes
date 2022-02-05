@@ -1,10 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
+import Header from '../component/Header';
 
-class Album extends Component {
+class Album extends React.Component {
   render() {
     return (
-      <div data-testid="page-album">Album</div>
-
+      <div data-testid="page-album">
+        Album
+        <Header />
+      </div>
     );
   }
 }
