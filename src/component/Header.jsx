@@ -24,20 +24,17 @@ class Header extends React.Component {
   render() {
     const { load, user } = this.state;
     return (
-      <header data-testid="header-component">
+      <div data-testid="header-component">
         <Links />
         { load && <Loading /> }
         <p data-testid="header-user-name">{ user.name}</p>
-        <nav>
-          <Link data-testid="link-to-search" to="/search">Search</Link>
-          <Link data-testid="link-to-search" to="/favorites">Músicas Favoritas</Link>
-          <Link data-testid="link-to-profile" to="/profile">Profile</Link>
-        </nav>
-      </header>
+        <Link data-testid="link-to-search" to="/search">Search</Link>
+        <Link data-testid="link-to-favorites" to="/favorites">Músicas Favoritas</Link>
+        <Link data-testid="link-to-profile" to="/profile">Profile</Link>
+      </div>
 
     );
   }
 }
 
 export default Header;
-// helper Bruno
