@@ -4,6 +4,7 @@ import Header from '../component/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from '../component/MusicCard';
 import Loading from '../component/Loading';
+import { addSong } from '../services/favoriteSongsAPI';
 
 export default class Albuns extends Component {
   state = {
@@ -11,6 +12,7 @@ export default class Albuns extends Component {
     artist: '',
     albumName: '',
     loading: false,
+    favoriteMusic: [],
   }
 
   async componentDidMount() {
@@ -27,28 +29,43 @@ export default class Albuns extends Component {
     });
   }
 
-  // criar map. para as músicas item 7.
-  render() {
-    const { artist, albumName, musics, loading } = this.state;
-    return (
-      <div data-testid="page-album">
-        <Header />
-        {
-          loading ? <Loading /> : (
-            <div>
-              <h3 data-testid="artist-name">{artist}</h3>
-              <h4 data-testid="album-name">{albumName}</h4>
-              {
-                musics.map((music) => (
-                  <MusicCard { ...music } key={ music.trackId } />
-                ))
-              }
-            </div>
-          )
-        }
-      </div>
-    );
-  }
+handleChange = async (id) => {
+  const { musics } = this.state;
+  const musicFind = musics.find((music) => music.trackId === id);
+  this.setState((prevState) => (
+    { favoriteMusic: [...prevState.favoriteMusic, musicFind],
+      loading: true }));
+  await addSong(musicFind);
+  this.setState({ loading: false });
+};
+
+render() {
+  const { artist, albumName, musics, loading, favoriteMusic } = this.state;
+  return (
+    <div data-testid="page-album">
+      <Header />
+      {
+        loading ? <Loading /> : (
+          <div>
+            <h3 data-testid="artist-name">{artist}</h3>
+            <h4 data-testid="album-name">{albumName}</h4>
+            {
+              musics.map((music) => (
+                <MusicCard
+                  { ...music }
+                  key={ music.trackId }
+                  handleChange={ this.handleChange }
+                  checked={ favoriteMusic
+                    .some((favorite) => favorite.trackId === music.trackId) }
+                />
+              ))
+            }
+          </div>
+        )
+      }
+    </div>
+  );
+}
 }
 
 Albuns.propTypes = {
