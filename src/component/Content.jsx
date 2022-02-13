@@ -7,6 +7,7 @@ import NotFound from '../pages/NotFound';
 import Profile from '../pages/Profile';
 import ProfileEdit from '../pages/ProfileEdit';
 import Search from '../pages/Search';
+
 // import Home from '../pages/Home';
 
 class Content extends Component {
@@ -15,7 +16,7 @@ class Content extends Component {
       <div>
         <Switch>
           <Route exact path="/" component={ Login } />
-          <Route path="/album/:id" component={ Album } />
+          <Route path="/album/:id" render={ (props) => <Album { ...props } /> } />
           <Route path="/favorites" component={ Favorites } />
           <Route path="/profile/edit" component={ ProfileEdit } />
           <Route path="/profile" component={ Profile } />
