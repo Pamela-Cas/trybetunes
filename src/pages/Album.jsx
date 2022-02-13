@@ -4,7 +4,7 @@ import Header from '../component/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from '../component/MusicCard';
 import Loading from '../component/Loading';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 
 export default class Albuns extends Component {
   state = {
@@ -19,7 +19,8 @@ export default class Albuns extends Component {
     const { match } = this.props;
     const { params } = match;
     const { id } = params;
-    this.setState({ loading: true });
+    const favoriteMusic = await getFavoriteSongs();
+    this.setState({ loading: true, favoriteMusic });
     const recebeMusicas = await getMusics(id);
     this.setState({
       musics: recebeMusicas.slice(1),
@@ -30,7 +31,14 @@ export default class Albuns extends Component {
   }
 
 handleChange = async (id) => {
-  const { musics } = this.state;
+  const { musics, favoriteMusic } = this.state;
+  const favoriteFind = favoriteMusic.find((music) => music.trackId === id);
+  if (favoriteFind) {
+    await removeSong(favoriteFind);
+    return this.setState((prevState) => (
+      { favoriteMusic: prevState.favoriteMusic
+        .filter((favorite) => favorite.trackId !== id) }));
+  }
   const musicFind = musics.find((music) => music.trackId === id);
   this.setState((prevState) => (
     { favoriteMusic: [...prevState.favoriteMusic, musicFind],
